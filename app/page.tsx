@@ -107,6 +107,11 @@ export default function Home() {
 async function bookFlight(flightId: string) {
   const name = prompt("Enter your name:");
 
+  if (!name) {
+    alert("Name is required");
+    return;
+  }
+
   const res = await fetch("/api/bookings", {
     method: "POST",
     headers: {
@@ -119,5 +124,11 @@ async function bookFlight(flightId: string) {
   });
 
   const data = await res.json();
+
+  if (!res.ok) {
+    alert(data.error);
+    return;
+  }
+
   alert("Booking success! Ref: " + data.bookingRef);
 }
