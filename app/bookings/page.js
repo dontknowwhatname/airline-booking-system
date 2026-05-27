@@ -6,10 +6,16 @@ export default function BookingsPage() {
   const [name, setName] = useState("");
   const [bookings, setBookings] = useState([]);
   const [searched, setSearched] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const searchBookings = async () => {
+    setLoading(true);
+
     setSearched(true);
-    const res = await fetch(`/api/bookings?name=${name}`);
+
+    const res = await fetch(
+      `/api/bookings?name=${name}`
+    );
 
     const data = await res.json();
 
@@ -18,6 +24,8 @@ export default function BookingsPage() {
     } else {
       setBookings([]);
     }
+
+    setLoading(false);
   };
 
   const cancelBooking = async (bookingRef) => {
@@ -131,7 +139,7 @@ export default function BookingsPage() {
         <input
           placeholder="Enter Passenger Name"
           value={name}
-          onChange={(e) => setName(e.target.value.toUpperCase())}
+          onChange={(e) => setName(e.target.value)}
           style={{
             padding: "12px",
             width: "280px",
@@ -157,6 +165,18 @@ export default function BookingsPage() {
           Search Bookings
         </button>
       </div>
+      {loading && (
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: "40px",
+            color: "#666",
+            fontSize: "18px",
+          }}
+        >
+          Searching bookings...
+        </div>
+      )}
 
       {/* Booking Results */}
       <div
@@ -166,7 +186,7 @@ export default function BookingsPage() {
         }}
       >
 
-        {searched && bookings.length === 0 && (
+        {searched && !loading && bookings.length === 0 && (
           <div
             style={{
               textAlign: "center",

@@ -177,6 +177,19 @@ export default function Home() {
         </button>
       </div>
 
+      {loading && (
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: "40px",
+            color: "#666",
+            fontSize: "18px",
+          }}
+        >
+          Searching flights...
+        </div>
+      )}
+
       {/* Flight Results */}
       <div
         style={{
@@ -185,7 +198,7 @@ export default function Home() {
         }}
       >
 
-      {searched && flights.length === 0 && (
+      {searched && !loading && flights.length === 0 && (
       <div
         style={{
           textAlign: "center",

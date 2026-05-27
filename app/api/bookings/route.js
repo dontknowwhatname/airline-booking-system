@@ -59,7 +59,10 @@ export async function GET(request) {
     const bookings = await db
       .collection("bookings")
       .find({
-        passengerName: name,
+        passengerName: {
+          $regex: `^${name}$`,
+          $options: "i",
+        },
       })
       .toArray();
 
