@@ -4,16 +4,28 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
 
+    const from = searchParams.get("from");
     const to = searchParams.get("to");
     const date = searchParams.get("date");
 
     const client = await clientPromise;
     const db = client.db("airline");
 
-    let query = {};
+    const query = {};
+
+    if (from) {
+      query.from = from.toUpperCase();
+    }
 
     if (to) {
-      query.to = to;
+      query.to = to.toUpperCase();
+    }
+
+    // date filter
+    if (date) {
+      query.departureTime = {
+        $regex: date,
+      };
     }
 
     const flights = await db

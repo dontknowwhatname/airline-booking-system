@@ -63,7 +63,25 @@ export async function GET(request) {
       })
       .toArray();
 
-    return Response.json(bookings);
+    const bookingsWithFlights =
+      await Promise.all(
+        bookings.map(async (booking) => {
+          const flight = await db
+            .collection("flights")
+            .findOne({
+              _id: new ObjectId(
+                booking.flightId
+              ),
+            });
+
+          return {
+            ...booking,
+            flight,
+          };
+        })
+      );
+
+return Response.json(bookingsWithFlights);
 
   } catch (error) {
     console.error(error);
